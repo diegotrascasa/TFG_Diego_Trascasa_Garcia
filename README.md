@@ -1,6 +1,6 @@
-# Titulo:
-
-Prototipo de sistema de monitoreo cardiaco en tiempo real para la detección de enfermedades cardíacas.
+# Prototipo de sistema de monitoreo cardiaco en tiempo real para la detección de enfermedades cardíacas.
+### Ingeniería de la Salud
+#### Diego Trascasa García
 
 # Resumen:
 
