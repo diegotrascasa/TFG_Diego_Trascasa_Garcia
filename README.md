@@ -1,32 +1,8 @@
-# Plantilla LaTeX para el Trabajo Final de Grado de Ingeniería de la Salud (Burgos) 
-https://www.ubu.es/grado-en-ingenieria-de-la-salud
+# Titulo:
 
-La plantilla se compone de dos documentos maestros: uno para la memoria y otro para los anexos.
+Prototipo de sistema de monitoreo cardiaco en tiempo real para la detección de enfermedades cardíacas.
 
-- Memoría: ```memoria.tex```
-- Anexos: ```anexos.tex```
+# Resumen:
 
-En la carpeta ```tex``` se encuentran los distintos documentos que forman los documentos maestros. 
-Dichos documentos contienen las secciones y subsecciones a completar.
-En el documento ```3_teoricos.tex``` se encuentra una breve guía de cómo usar LaTeX.
+Este prototipo se centra en el desarrollo de un sistema de monitoreo cardiaco que emplea una serie de sensores para proporcionar una solución eficaz en la detección y seguimiento de condiciones cardiacas. El sistema se basa en la recopilación de datos precisos sobre la frecuencia cardíaca del paciente, estos datos son transmitidos de manera inalámbrica a una plataforma web donde se visualizarán y analizarán. El prototipo ofrece un monitoreo continuo y en tiempo real del ritmo cardiaco del usuario, lo que permite una detección temprana de posibles irregularidades o problemas cardiacos. Esta capacidad de monitoreo en tiempo real es interesante en pacientes con condiciones cardíacas preexistentes y para el control activo de la salud cardiovascular.
 
-# Creación y edición de documentos en LaTeX
-
-LaTeX es un lenguaje de marcado. 
-Para crear y editar documentos en LaTeX se necesita un editor de LaTeX, que puede estar instalado en nuestro ordenador http://www.xm1math.net/texmaker/, o puede tratarse de un servicio web https://www.overleaf.com/.
-
-Un videotutorial de la instalación de Miktex + TexMaker en windows puede verse en 
-https://www.youtube.com/watch?v=DIdHfVpIiAk
-
-Otra opción es editar los ficheros en la nube usando: https://es.overleaf.com/
-
-# Petición de cambios y sugerencias
-
-Se ruega a los alumnos y tutores que detecten fallos o que quieran proponer una sugerencia, que lo notifiquen mediante la creación de una issue https://IngenieriaSaludBurgos/PlantillaTFG/issues
-
-# Gracias a los contribuidores
-
-Esta plantilla está basada en la creada para el grado de Informática https://github.com/ubutfgm/plantillaLatex
-
-Gracias entre otros a César Ignacio García Osorio, Álvar Arnaiz Gonzalez, José Francisco Díez Pastor, Carlos Lopez Nozal.
-Álvaro López Cantero, Roberto Izquierdo Amo, David Miguel Lozano, Daniel Puente Ramírez. Samuel Lozano Juárez
