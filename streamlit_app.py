@@ -5,7 +5,7 @@ import subprocess
 
 def start_tkinter_app():
     # Ejecuta la aplicación de Tkinter en un hilo separado
-    subprocess.Popen(['python', 'app.py'])
+    subprocess.Popen(['python', 'serialmonitor.py'])
 
 st.title("Integración de Tkinter con Streamlit")
 
