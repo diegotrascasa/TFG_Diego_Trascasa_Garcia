@@ -1,3 +1,7 @@
 streamlit
-matplotlib
+pandas
 numpy
+matplotlib
+scipy
+joblib
+pillow
