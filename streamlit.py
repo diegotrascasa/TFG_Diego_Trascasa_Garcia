@@ -4,34 +4,58 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 import joblib
-from datetime import date
+from datetime import datetime
 from PIL import Image
 import threading
 import subprocess
+import sqlite3
 
 # Configuración de la página de Streamlit
 st.set_page_config(
     page_title="Sistema de Monitoreo Cardíaco",
-    page_icon="fotos/corazonreal.png",
+    page_icon="fotos/logo.webp",
     layout="wide"
 )
 
-# Cargar la imagen para la introducción
+# Conectar o crear la base de datos SQLite
+conn = sqlite3.connect('predicciones_ecg.db')
+c = conn.cursor()
+
+# Crear la tabla si no existe
+c.execute('''CREATE TABLE IF NOT EXISTS predicciones (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 fecha_hora TEXT,
+                 predicciones_numeros TEXT,
+                 predicciones_etiquetas TEXT)''')
+
+# Verificar si las columnas 'predicciones_numeros' y 'predicciones_etiquetas' existen, y si no, agregarlas
+c.execute("PRAGMA table_info(predicciones)")
+columnas = [columna[1] for columna in c.fetchall()]
+if 'predicciones_numeros' not in columnas:
+    c.execute("ALTER TABLE predicciones ADD COLUMN predicciones_numeros TEXT")
+if 'predicciones_etiquetas' not in columnas:
+    c.execute("ALTER TABLE predicciones ADD COLUMN predicciones_etiquetas TEXT")
+conn.commit()
+
+# Cargar las imágenes para la introducción
 imagen = Image.open('fotos/corazonreal.png')
+imagen_intro = Image.open('fotos/imagen3.jfif')
+imagen_ecg = Image.open('fotos/ecg.webp')
+imagen_ecg2 = Image.open('fotos/ecg2.jpg')
 
 # Estilos CSS personalizados para mejorar la apariencia de la aplicación
 st.markdown("""
 <style>
     .title-text {
         color: #2c3e50;
-        font-size: 36px;
+        font-size: 48px;
         font-weight: bold;
         text-align: center;
         margin-bottom: 20px;
     }
     .subtitle-text {
         color: #2c3e50;
-        font-size: 24px;
+        font-size: 32px;
         font-weight: bold;
         text-align: center;
         margin-top: 30px;
@@ -39,9 +63,13 @@ st.markdown("""
     }
     .description-text {
         color: #34495e;
-        font-size: 18px;
+        font-size: 20px;
         text-align: justify;
         margin-bottom: 30px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     .btn-open-app {
         background-color: #27ae60;
@@ -51,9 +79,19 @@ st.markdown("""
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
     }
     .btn-open-app:hover {
         background-color: #219653;
+    }
+    .resource-link {
+        color: #2980b9;
+        font-size: 18px;
+    }
+    .resource-link:hover {
+        text-decoration: underline;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -92,18 +130,27 @@ def pagina_introduccion():
     Incluye una imagen, una descripción de la aplicación y enlaces a recursos adicionales.
     """
     st.markdown('<h1 class="title-text">Sistema de Monitoreo Cardíaco en Tiempo Real</h1>', unsafe_allow_html=True)
-    st.image(imagen, caption='Monitoreo Cardíaco', use_column_width=True)
+    st.image(imagen_intro, caption='Monitoreo Cardíaco', use_column_width=True)
     st.markdown("""
         <div class="description-text">
-            <p>Bienvenido al Sistema de Monitoreo Cardíaco en Tiempo Real. Esta aplicación permite la supervisión continua de la actividad cardíaca en tiempo real.</p>
+            <p>👋 Bienvenido al <b>Sistema de Monitoreo Cardíaco en Tiempo Real</b>. Esta aplicación permite la supervisión continua de la actividad cardíaca en tiempo real.</p>
             <p>Conéctate a un dispositivo de monitoreo cardíaco a través de un puerto serial, observa los datos en vivo y guarda las grabaciones para su análisis posterior.</p>
-            <p>Funcionalidades:</p>
+            <h3>⚙️ Funcionalidades:</h3>
             <ul>
-                <li>Conexión y desconexión del dispositivo de monitoreo cardíaco.</li>
-                <li>Visualización en tiempo real de los datos de ECG.</li>
-                <li>Cálculo y visualización de la frecuencia cardíaca en BPM.</li>
-                <li>Grabación y almacenamiento de los datos de ECG.</li>
+                <li>🔌 Conexión y desconexión del dispositivo de monitoreo cardíaco.</li>
+                <li>📊 Visualización en tiempo real de los datos de ECG.</li>
+                <li>💓 Cálculo y visualización de la frecuencia cardíaca en BPM.</li>
+                <li>💾 Grabación y almacenamiento de los datos de ECG.</li>
             </ul>
+            <h3>📋 Instrucciones Básicas:</h3>
+            <p>Para empezar a utilizar la aplicación, sigue estos sencillos pasos:</p>
+            <ol>
+                <li>Coloca los electrodos correctamente en tu cuerpo según las instrucciones de tu médico.</li>
+                <li>Conecta el dispositivo de monitoreo al puerto USB de tu computadora.</li>
+                <li>En la sección de "Datos en Vivo", selecciona el puerto COM correspondiente y abre la conexión.</li>
+                <li>Observa tus datos cardíacos en tiempo real y graba las sesiones cuando sea necesario.</li>
+            </ol>
+            <p>Si tienes alguna duda, consulta la sección de <i>Recursos Adicionales</i> o contacta a tu profesional de salud.</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -113,9 +160,9 @@ def pagina_introduccion():
         <div class="description-text">
             <p>Para más información sobre el monitoreo cardíaco, consulta los siguientes recursos:</p>
             <ul>
-                <li><a href="https://www.cdc.gov/heartdisease/facts.htm" target="_blank">Datos sobre enfermedades cardíacas - CDC</a></li>
-                <li><a href="https://www.heart.org/en/health-topics/heart-attack" target="_blank">Información sobre ataques cardíacos - American Heart Association</a></li>
-                <li><a href="https://www.who.int/health-topics/cardiovascular-diseases" target="_blank">Enfermedades cardiovasculares - OMS</a></li>
+                <li><a class="resource-link" href="https://www.cdc.gov/heartdisease/facts.htm" target="_blank">Datos sobre enfermedades cardíacas - CDC</a></li>
+                <li><a class="resource-link" href="https://www.heart.org/en/health-topics/heart-attack" target="_blank">Información sobre ataques cardíacos - American Heart Association</a></li>
+                <li><a class="resource-link" href="https://www.who.int/health-topics/cardiovascular-diseases" target="_blank">Enfermedades cardiovasculares - OMS</a></li>
             </ul>
         </div>
     """, unsafe_allow_html=True)
@@ -136,6 +183,47 @@ def pagina_datos_en_vivo():
             <p>Conéctate a un dispositivo de monitoreo cardíaco y observa los datos de ECG en tiempo real.</p>
         </div>
     """, unsafe_allow_html=True)
+
+    st.markdown('<h2 class="subtitle-text">Instrucciones de Uso</h2>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+            <div class="description-text">
+                <h3>1. Colocación de los Electrodos</h3>
+                <p>Para obtener una lectura precisa, coloca los electrodos en las posiciones correctas del cuerpo del paciente como se muestra en la imagen a continuación:</p>
+            </div>
+        """, unsafe_allow_html=True)
+        imagen_electrodos = Image.open('fotos/imagen.png')
+        st.image(imagen_electrodos, caption='Colocación de los Electrodos', width=300)
+    
+    with col2:
+        st.markdown("""
+            <div class="description-text">
+                <h3>2. Ciclo Cardíaco y la Onda PQRST</h3>
+                <p>La señal de ECG representa el ciclo cardíaco con las diferentes ondas (P, Q, R, S, T) que corresponden a las distintas fases del latido cardíaco. A continuación se muestra una ilustración de la onda PQRST:</p>
+            </div>
+        """, unsafe_allow_html=True)
+        imagen_ciclo = Image.open('fotos/imagen22.png')
+        st.image(imagen_ciclo, caption='Ciclo Cardíaco y Onda PQRST', width=300)
+
+    st.markdown("""
+        <div class="description-text">
+            <h3>3. Uso del Software</h3>
+            <p>Sigue estos pasos para utilizar el software de monitoreo cardíaco:</p>
+            <ol>
+                <li>Selecciona el puerto COM al que está conectado el electrocardiógrafo en el menú desplegable.</li>
+                <li>Haz clic en "Abrir Serial" para iniciar la conexión con el dispositivo.</li>
+                <li>Observa los datos de ECG en tiempo real en el gráfico.</li>
+                <li>Para iniciar la grabación de los datos, haz clic en "Iniciar Grabación".</li>
+                <li>Para detener la grabación, haz clic en "Detener Grabación".</li>
+                <li>Para cerrar la conexión con el dispositivo, haz clic en "Cerrar Serial".</li>
+            </ol>
+            <p>Nota: Asegúrate de cerrar la conexión serial antes de desconectar el dispositivo del puerto USB.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
     if st.button("Abrir Aplicación Tkinter", key="btn_open_app"):
         threading.Thread(target=lambda: subprocess.Popen(['python', 'serialmonitor.py'])).start()
         st.success("Aplicación Tkinter Iniciada. Por favor, espere un momento.")
@@ -278,6 +366,23 @@ def realizar_predicciones(segmentos_finales):
     etiquetas_predicciones = [etiquetas[pred] for pred in predicciones]
     return predicciones, etiquetas_predicciones
 
+# Función para guardar predicciones en la base de datos
+def guardar_predicciones_db(predicciones, etiquetas_predicciones):
+    """
+    Esta función guarda las predicciones en la base de datos con la fecha y hora actuales.
+
+    Args:
+        predicciones (array): Predicciones del modelo.
+        etiquetas_predicciones (list): Etiquetas de las predicciones.
+    """
+    fecha_hora_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    predicciones_numeros_str = ','.join(map(str, predicciones))
+    predicciones_etiquetas_str = ','.join(etiquetas_predicciones)
+    c.execute("INSERT INTO predicciones (fecha_hora, predicciones_numeros, predicciones_etiquetas) VALUES (?, ?, ?)",
+              (fecha_hora_actual, predicciones_numeros_str, predicciones_etiquetas_str))
+    conn.commit()
+    st.success("Predicciones guardadas en la base de datos.")
+
 # Función para mostrar los resultados de las predicciones
 def mostrar_predicciones(predicciones, etiquetas_predicciones, segmentos_finales):
     """
@@ -297,6 +402,9 @@ def mostrar_predicciones(predicciones, etiquetas_predicciones, segmentos_finales
     st.markdown('<h2 class="subtitle-text">Resultados de las Predicciones</h2>', unsafe_allow_html=True)
     st.dataframe(resultados_df)
 
+    if st.button("Guardar Resultados en la Base de Datos"):
+        guardar_predicciones_db(predicciones, etiquetas_predicciones)
+
     indice_segmento = st.slider('Selecciona el segmento', 0, len(segmentos_finales) - 1, 0)
 
     def graficar_segmento(indice_segmento):
@@ -315,18 +423,44 @@ def mostrar_info_predicciones():
     Esta función muestra información sobre cada etiqueta de predicción.
     """
     st.markdown('<h2 class="subtitle-text">Información de las Predicciones</h2>', unsafe_allow_html=True)
+    
+    # Convertir el diccionario a un DataFrame para la tabla
     info_datos = {
-        "Etiqueta": ["Latidos Normales", "Latidos de Ectopia Supraventricular", "Latidos de Ectopia Ventricular", "Latidos de Fusión", "Latidos Inclasificables"],
-        "Descripción": [
-            info_etiquetas["Latidos Normales"],
-            info_etiquetas["Latidos de Ectopia Supraventricular"],
-            info_etiquetas["Latidos de Ectopia Ventricular"],
-            info_etiquetas["Latidos de Fusión"],
-            info_etiquetas["Latidos Inclasificables"]
-        ]
+        "Etiqueta": list(info_etiquetas.keys()),
+        "Descripción": [info["Descripción"] for info in info_etiquetas.values()],
+        "Asociación Patológica": [info["Asociación Patológica"] for info in info_etiquetas.values()]
     }
     info_df = pd.DataFrame(info_datos)
+    
+    # Mostrar la tabla en Streamlit
     st.table(info_df)
+
+# Función para mostrar y gestionar la base de datos
+def pagina_base_datos():
+    """
+    Esta función muestra la base de datos de predicciones y permite gestionar los registros.
+    """
+    st.markdown('<h1 class="title-text">Base de Datos de Predicciones</h1>', unsafe_allow_html=True)
+    predicciones_db = pd.read_sql_query("SELECT id, fecha_hora, predicciones_numeros, predicciones_etiquetas FROM predicciones", conn)
+    st.dataframe(predicciones_db)
+
+    seleccion_eliminar = st.multiselect('Selecciona los IDs de las predicciones a eliminar', predicciones_db['id'].tolist())
+
+    if st.button('Eliminar Predicciones Seleccionadas'):
+        if seleccion_eliminar:
+            c.executemany('DELETE FROM predicciones WHERE id=?', [(id,) for id in seleccion_eliminar])
+            conn.commit()
+            st.success('Predicciones eliminadas.')
+            # Actualizar la visualización de la base de datos
+            predicciones_db = pd.read_sql_query("SELECT id, fecha_hora, predicciones_numeros, predicciones_etiquetas FROM predicciones", conn)
+            st.dataframe(predicciones_db)
+        else:
+            st.error('Selecciona al menos una predicción para eliminar.')
+
+    if st.button('Descargar Base de Datos'):
+        predicciones_db.to_csv('predicciones_ecg.csv', index=False)
+        with open('predicciones_ecg.csv', 'rb') as file:
+            st.download_button('Descargar CSV', file, file_name='predicciones_ecg.csv')
 
 # Función para la página de análisis de datos
 def pagina_analisis_datos():
@@ -358,6 +492,7 @@ paginas = {
     "Introducción": pagina_introduccion,
     "Datos en Vivo": pagina_datos_en_vivo,
     "Análisis de Datos": pagina_analisis_datos,
+    "Base de Datos": pagina_base_datos
 }
 
 # Menú de navegación
