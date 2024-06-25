@@ -39,7 +39,7 @@ conn.commit()
 
 # Cargar las imágenes para la introducción
 imagen = Image.open('fotos/corazonreal.png')
-imagen_intro = Image.open('fotos/imagen3.jfif')
+imagen_intro = Image.open('fotos/corazon_portada.jpg')
 imagen_ecg = Image.open('fotos/ecg.webp')
 imagen_ecg2 = Image.open('fotos/ecg2.jpg')
 
@@ -123,7 +123,6 @@ info_etiquetas = {
     }
 }
 
-# Función para la página de introducción
 def pagina_introduccion():
     """
     Esta función configura y muestra la página de introducción de la aplicación.
@@ -137,39 +136,40 @@ def pagina_introduccion():
             <p>Conéctate a un dispositivo de monitoreo cardíaco a través de un puerto serial, observa los datos en vivo y guarda las grabaciones para su análisis posterior.</p>
             <h3>⚙️ Funcionalidades:</h3>
             <ul>
-                <li>🔌 Conexión y desconexión del dispositivo de monitoreo cardíaco.</li>
-                <li>📊 Visualización en tiempo real de los datos de ECG.</li>
-                <li>💓 Cálculo y visualización de la frecuencia cardíaca en BPM.</li>
-                <li>💾 Grabación y almacenamiento de los datos de ECG.</li>
+                <li> Visualización en tiempo real de los datos de ECG.</li>
+                <li> Cálculo y visualización de la frecuencia cardíaca en BPM.</li>
+                <li> Grabación y almacenamiento de los datos de ECG.</li>
+                <li> Predicción que clasifica cada ciclo cardíaco.</li>
+                <li> Almacenamiento de las predicciones en una base de datos.</li>
             </ul>
-            <h3>📋 Instrucciones Básicas:</h3>
-            <p>Para empezar a utilizar la aplicación, sigue estos sencillos pasos:</p>
+            <h3>📋 Páginas de la Aplicación:</h3>
+            <h4>Datos en Vivo:</h4>
+            <p>En esta sección, puedes visualizar los datos de tu ECG en tiempo real. Sigue los pasos para configurar tu dispositivo y comenzar la monitorización:</p>
             <ol>
-                <li>Coloca los electrodos correctamente en tu cuerpo según las instrucciones de tu médico.</li>
-                <li>Conecta el dispositivo de monitoreo al puerto USB de tu computadora.</li>
-                <li>En la sección de "Datos en Vivo", selecciona el puerto COM correspondiente y abre la conexión.</li>
-                <li>Observa tus datos cardíacos en tiempo real y graba las sesiones cuando sea necesario.</li>
+                <li>Selecciona el puerto COM correspondiente a tu dispositivo de monitoreo.</li>
+                <li>Abre la conexión para empezar a recibir datos.</li>
+                <li>Observa la gráfica del ECG en tiempo real y monitorea tu frecuencia cardíaca.</li>
+                <li>Utiliza la opción de grabación para almacenar sesiones de datos para su análisis posterior.</li>
             </ol>
-            <p>Si tienes alguna duda, consulta la sección de <i>Recursos Adicionales</i> o contacta a tu profesional de salud.</p>
+            <h4>Análisis de Datos:</h4>
+            <p>En esta sección, puedes cargar y analizar las grabaciones de datos de ECG almacenadas. Sigue los pasos para realizar un análisis detallado:</p>
+            <ol>
+                <li>Carga el archivo de grabación de ECG desde tu dispositivo.</li>
+                <li>Visualiza la gráfica de ECG y utiliza las herramientas disponibles para analizar los segmentos de interés.</li>
+                <li>Aplica la funcionalidad de predicción para clasificar los ciclos cardíacos.</li>
+                <li>Guarda los resultados del análisis y las predicciones en la base de datos para una revisión posterior.</li>
+            </ol>
+            <h4>Base de Datos:</h4>
+            <p>En esta sección, puedes gestionar las predicciones almacenadas y revisar los registros históricos. Sigue los pasos para acceder y administrar tu base de datos:</p>
+            <ol>
+                <li>Visualiza los registros de predicciones almacenadas en la base de datos.</li>
+                <li>Filtra los registros por fecha, etiquetas de predicción, y otros criterios relevantes.</li>
+                <li>Elimina registros incorrectos o que ya no sean necesarios.</li>
+                <li>Exporta los datos seleccionados para su uso en otros análisis o informes.</li>
+            </ol>
+            <p>Si tienes alguna duda, contacta a tu profesional de salud.</p>
         </div>
     """, unsafe_allow_html=True)
-
-    # Sección de recursos adicionales
-    st.markdown('<h2 class="subtitle-text">Recursos Adicionales</h2>', unsafe_allow_html=True)
-    st.markdown("""
-        <div class="description-text">
-            <p>Para más información sobre el monitoreo cardíaco, consulta los siguientes recursos:</p>
-            <ul>
-                <li><a class="resource-link" href="https://www.cdc.gov/heartdisease/facts.htm" target="_blank">Datos sobre enfermedades cardíacas - CDC</a></li>
-                <li><a class="resource-link" href="https://www.heart.org/en/health-topics/heart-attack" target="_blank">Información sobre ataques cardíacos - American Heart Association</a></li>
-                <li><a class="resource-link" href="https://www.who.int/health-topics/cardiovascular-diseases" target="_blank">Enfermedades cardiovasculares - OMS</a></li>
-            </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Sección de video informativo
-    st.markdown('<h2 class="subtitle-text">Video Informativo</h2>', unsafe_allow_html=True)
-    st.video("https://www.youtube.com/watch?v=S-iCIuCfjiQ")
 
 # Función para la página de datos en vivo
 def pagina_datos_en_vivo():
@@ -178,55 +178,71 @@ def pagina_datos_en_vivo():
     Permite al usuario conectarse a un dispositivo de monitoreo cardíaco y visualizar datos en tiempo real.
     """
     st.markdown('<h1 class="title-text">Datos en Vivo</h1>', unsafe_allow_html=True)
+
+    # Botón para abrir la ventana de monitoreo cardíaco
+    st.markdown('<h2 class="subtitle-text">Abrir Ventana de Monitoreo Cardíaco</h2>', unsafe_allow_html=True)
+    if st.button("Abrir Ventana Monitoreo Cardíaco", key="btn_open_app"):
+        threading.Thread(target=lambda: subprocess.Popen(['python', 'serialmonitor.py'])).start()
+        st.success("Ventana Monitoreo Cardíaco Iniciada. Por favor, espere un momento.")
+
     st.markdown("""
         <div class="description-text">
-            <p>Conéctate a un dispositivo de monitoreo cardíaco y observa los datos de ECG en tiempo real.</p>
+            <p>Conéctate a un dispositivo de monitoreo cardíaco y observa los datos de ECG en tiempo real. Esta sección te permitirá ver la actividad eléctrica del corazón a medida que sucede, lo cual es fundamental para la detección temprana de irregularidades y para la monitorización continua de pacientes con afecciones cardíacas.</p>
         </div>
     """, unsafe_allow_html=True)
 
     st.markdown('<h2 class="subtitle-text">Instrucciones de Uso</h2>', unsafe_allow_html=True)
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("""
-            <div class="description-text">
-                <h3>1. Colocación de los Electrodos</h3>
-                <p>Para obtener una lectura precisa, coloca los electrodos en las posiciones correctas del cuerpo del paciente como se muestra en la imagen a continuación:</p>
-            </div>
-        """, unsafe_allow_html=True)
-        imagen_electrodos = Image.open('fotos/imagen.png')
-        st.image(imagen_electrodos, caption='Colocación de los Electrodos', width=300)
-    
-    with col2:
-        st.markdown("""
-            <div class="description-text">
-                <h3>2. Ciclo Cardíaco y la Onda PQRST</h3>
-                <p>La señal de ECG representa el ciclo cardíaco con las diferentes ondas (P, Q, R, S, T) que corresponden a las distintas fases del latido cardíaco. A continuación se muestra una ilustración de la onda PQRST:</p>
-            </div>
-        """, unsafe_allow_html=True)
-        imagen_ciclo = Image.open('fotos/imagen22.png')
-        st.image(imagen_ciclo, caption='Ciclo Cardíaco y Onda PQRST', width=300)
 
     st.markdown("""
         <div class="description-text">
-            <h3>3. Uso del Software</h3>
-            <p>Sigue estos pasos para utilizar el software de monitoreo cardíaco:</p>
+            <h3>1. Colocación de los Electrodos</h3>
+            <p>Para obtener una lectura precisa, coloca los electrodos en las posiciones correctas del cuerpo del paciente. La colocación adecuada es crucial para garantizar la calidad de la señal. A continuación se muestra una guía visual:</p>
+        </div>
+    """, unsafe_allow_html=True)
+    imagen_electrodos = Image.open('fotos/imagen.png')
+    st.image(imagen_electrodos, caption='Colocación de los Electrodos', width=250)  # Ajustar el tamaño de la imagen
+
+    st.markdown("""
+        <div class="description-text">
+            <h3>2. Conexión del Dispositivo</h3>
+            <p>Sigue estos pasos para conectar y utilizar el dispositivo de monitoreo cardíaco:</p>
             <ol>
-                <li>Selecciona el puerto COM al que está conectado el electrocardiógrafo en el menú desplegable.</li>
+                <li>Conecta el dispositivo de monitoreo cardíaco al puerto USB de tu computadora.</li>
+                <li>En la ventana, selecciona el puerto COM al que está conectado el electrocardiógrafo en el menú desplegable.</li>
                 <li>Haz clic en "Abrir Serial" para iniciar la conexión con el dispositivo.</li>
-                <li>Observa los datos de ECG en tiempo real en el gráfico.</li>
+                <li>Observa los datos de ECG en tiempo real en el gráfico proporcionado.</li>
                 <li>Para iniciar la grabación de los datos, haz clic en "Iniciar Grabación".</li>
                 <li>Para detener la grabación, haz clic en "Detener Grabación".</li>
                 <li>Para cerrar la conexión con el dispositivo, haz clic en "Cerrar Serial".</li>
             </ol>
-            <p>Nota: Asegúrate de cerrar la conexión serial antes de desconectar el dispositivo del puerto USB.</p>
+            <p>Nota: Asegúrate de cerrar la conexión serial antes de desconectar el dispositivo del puerto USB para evitar daños o pérdida de datos.</p>
         </div>
     """, unsafe_allow_html=True)
 
-    if st.button("Abrir Aplicación Tkinter", key="btn_open_app"):
-        threading.Thread(target=lambda: subprocess.Popen(['python', 'serialmonitor.py'])).start()
-        st.success("Aplicación Tkinter Iniciada. Por favor, espere un momento.")
+    st.markdown("""
+        <div class="description-text">
+            <h3>3. Interpretación de los Datos</h3>
+            <p>Una vez que la conexión esté establecida y los datos se estén mostrando, puedes interpretar las ondas del ECG para identificar diferentes características del ritmo cardíaco:</p>
+            <ul>
+                <li><b>Onda P:</b> Representa la despolarización auricular, que es la activación de las aurículas del corazón.</li>
+                <li><b>Complejo QRS:</b> Representa la despolarización ventricular, que es la activación de los ventrículos del corazón.</li>
+                <li><b>Onda T:</b> Representa la repolarización ventricular, que es la recuperación de los ventrículos después de la contracción.</li>
+            </ul>
+            <p>La interpretación correcta de estas ondas es crucial para el diagnóstico de diversas afecciones cardíacas. Asegúrate de consultar a un profesional de salud para un análisis detallado.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+        <div class="description-text">
+            <h3>4. Consejos para una Mejor Lectura</h3>
+            <ul>
+                <li>Evita el movimiento excesivo durante la medición para reducir el ruido en la señal.</li>
+                <li>Asegúrate de que los electrodos estén firmemente adheridos a la piel.</li>
+                <li>Evita lugares con interferencias electromagnéticas.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
+
 
 # Función para subir el archivo y procesar los datos
 def subir_y_procesar_archivo():
@@ -501,3 +517,4 @@ seleccion = st.sidebar.radio("Ir a", list(paginas.keys()))
 
 # Mostrar la página seleccionada
 paginas[seleccion]()
+
