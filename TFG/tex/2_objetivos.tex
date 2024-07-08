@@ -1,0 +1,56 @@
+\capitulo{2}{Objetivos}
+
+Este proyecto tiene como principal objetivo desarrollar un sistema de monitoreo cardíaco en tiempo real que sea accesible, eficaz y económico. Permitirá a los pacientes y a los profesionales de la salud supervisar la actividad cardíaca y detectar de manera temprana cualquier irregularidad. A continuación, se enumeran y explican de forma detallada los objetivos de la realización de este proyecto.
+
+\subsection{Objetivos generales}
+
+El proyecto se centra en la creación de una solución para detectar de manera temprana cualquier irregularidad en el ciclo cardíaco, que combine hardware y software de bajo costo y con una alta eficiencia. Los objetivos generales buscan asegurar que el sistema sea útil y fácil de usar para pacientes, mejorando la calidad de vida y facilitando el diagnóstico y seguimiento de afecciones cardíacas.
+
+\begin{itemize}
+\item \textbf{Desarrollar un sistema de monitoreo cardíaco en tiempo real}: Implementar una solución tecnológica que permita la visualización y grabación continua de la actividad cardíaca.
+\item \textbf{Mejorar la calidad de vida de los pacientes}: Proporcionar una herramienta de predicción que clasifique cada ciclo cardíaco y permita detectar de manera temprana cualquier irregularidad en la actividad cardíaca.
+\item \textbf{Asegurar la accesibilidad y economicidad del sistema}: Utilizar hardware y software de bajo costo y de código abierto para garantizar que la solución sea accesible a una amplia población.
+\end{itemize}
+
+\subsection{Objetivos de desarrollo web}
+
+Estos objetivos están relacionados con  la interfaz web con el objetivo de que la experiencia del usuario sea lo mejor posible.
+
+\begin{itemize}
+\item \textbf{Crear una interfaz web intuitiva y fácil de usar}: Desarrollar una aplicación web con una interfaz clara y amigable que permita a los usuarios interactuar fácilmente con el sistema.
+\item \textbf{Implementar la visualización y grabación de datos en tiempo real}: Mostrar los datos de ECG en una ventana con gráficos interactivos que se actualicen en tiempo real, en la cual se pueda grabar los datos de ECG en un fichero para que los usuarios guarden sus datos de ECG para un análisis posterior mediante la predicción de cada ciclo cardíaco.
+\item \textbf{Proporcionar herramientas básicas}: Ofrecer herramientas para el análisis de los datos almacenados como puede ser, el seleccionar el rango de datos (en tiempo) sobre el que quieras realizar la predicción. Además de herramientas para realizar cambios en la base de datos donde se almacenan todas las predicciones y diferentes botones para guardar los datos o subir los archivos para su análisis.   
+\end{itemize}
+
+\subsection{Objetivos de Integración y Funcionalidad del Sistema}
+
+Los objetivos en esta sección se enfocan en garantizar la integración efectiva del hardware con el software, asegurando que todas las partes del sistema funcionen en conjunto de manera eficiente y confiable.
+
+\begin{itemize}
+\item \textbf{Integrar el hardware con la aplicación web}: Asegurar que los datos recogidos por el hardware se transmitan correctamente a la aplicación web.
+\item \textbf{Desarrollar la funcionalidad de conexión y desconexión del dispositivo de monitoreo}: Permitir a los usuarios conectar y desconectar el dispositivo de monitoreo cardíaco a través de la interfaz web.
+\item \textbf{Implementar una base de datos robusta}: Utilizar SQLite para almacenar de manera eficiente las predicciones.
+\item \textbf{Crear ventanas interactivas para la selección y análisis de datos}: Permitir a los usuarios seleccionar ventanas de tiempo específicas para analizar los datos de ECG.
+\item \textbf{Desarrollar la funcionalidad de predicción utilizando machine learning}: Implementar modelos de machine learning, como Random Forest, para realizar predicciones sobre los datos de ECG.
+\item \textbf{Optimizar el modelo de predicción de Random Forest}: Ajustar los parámetros del modelo para mejorar la precisión en la clasificación de los diferentes tipos de latidos cardíacos que hay en la muestra.
+\end{itemize}
+
+\subsection{Objetivos de Desarrollo Hardware}
+
+Estos objetivos se centran en la mejora y optimización del hardware utilizado para el monitoreo cardíaco, asegurando su eficiencia y facilidad de uso, es decir, que sea lo más automático posible.
+
+\begin{itemize}
+\item \textbf{Optimizar el diseño del hardware}: Mejorar el diseño del sistema de monitoreo cardíaco para un mejor y más sencillo manejo. Esto implica incluir en el código de Arduino varias funcionalidades clave:
+\begin{enumerate}
+    \item \textbf{Calibración automática}: Durante el tiempo de calibración inicial, el sistema ajusta el umbral de detección de latidos basándose en los valores máximos y mínimos de la señal recibida. Esto asegura que el sistema sea adaptable a diferentes usuarios y condiciones.
+    \item \textbf{Detección de latidos}: Utiliza el valor umbral calibrado para detectar picos en la señal de ECG que corresponden a los latidos cardíacos. Cuando un latido es detectado, se enciende un LED para proporcionar una señal visual.
+    \item \textbf{Filtrado}: Filtra y procesa la señal del ECG para mejorar la precisión de la detección de latidos, minimizando el impacto del ruido y otras interferencias.
+\end{enumerate}
+
+
+\item \textbf{Implementar un LED que se encienda con el pulso del paciente}: Añadir un LED que indique visualmente el ritmo cardíaco del paciente. Este LED servirá también como una confirmación visual del correcto funcionamiento del dispositivo.
+\item \textbf{Desarrollar una caja protectora impresa en 3D}: Crear una caja mediante impresión 3D para alojar y proteger el microcontrolador Arduino y los componentes electrónicos. La caja estará diseñada para ofrecer un acceso fácil a los puertos y conexiones necesarias, al tiempo que proporciona protección contra el polvo y posibles impactos.
+
+\end{itemize}
+
+Estos objetivos buscarán asegurar que todo sea fácil de usar y cómodo para los pacientes.
