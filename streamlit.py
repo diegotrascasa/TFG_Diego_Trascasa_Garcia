@@ -38,10 +38,7 @@ if 'predicciones_etiquetas' not in columnas:
 conn.commit()
 
 # Cargar las imágenes para la introducción
-imagen = Image.open('fotos/corazonreal.png')
 imagen_intro = Image.open('fotos/corazon_portada.jpg')
-imagen_ecg = Image.open('fotos/ecg.webp')
-imagen_ecg2 = Image.open('fotos/ecg2.jpg')
 
 # Estilos CSS personalizados para mejorar la apariencia de la aplicación
 st.markdown("""
@@ -517,4 +514,5 @@ seleccion = st.sidebar.radio("Ir a", list(paginas.keys()))
 
 # Mostrar la página seleccionada
 paginas[seleccion]()
+
 
