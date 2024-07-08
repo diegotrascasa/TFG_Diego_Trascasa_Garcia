@@ -86,7 +86,7 @@ def iniciarSerial():
         etiquetaConexion.config(fg="red")  # Configura el color de la etiqueta de conexión como rojo
 
 
-def kill_Serial():
+def cerrar_Serial():
     """
     Función para cerrar la conexión serial.
 
@@ -269,7 +269,7 @@ canvas = FigureCanvasTkAgg(fig, master=ventana)
 canvas.draw()
 
 # Crea una etiqueta para mostrar "Datos en Vivo"
-lbl_vivo = tk.Label(text="Datos en Vivo:", font=('Helvetica', 12), fg='red')
+lbl_vivo = tk.Label(text="Datos en Vivo:", font=('Arial', 14), fg='blue')
 # Crea un marco para contener los botones y otras etiquetas
 fr_botones = tk.Frame(ventana, relief=tk.RAISED, bd=2)
 
@@ -277,7 +277,7 @@ fr_botones = tk.Frame(ventana, relief=tk.RAISED, bd=2)
 textoConexion = tk.StringVar(ventana)
 textoConexion.set("No conectado")
 # Crea una etiqueta para mostrar el estado de la conexión
-etiquetaConexion = tk.Label(fr_botones, textvariable=textoConexion, font=('Helvetica', 12), fg='red')
+etiquetaConexion = tk.Label(fr_botones, textvariable=textoConexion, font=('Arial', 14), fg='blue')
 etiquetaConexion.grid(row=0, column=0, sticky="ew", padx=10)
 
 # Crea una variable de cadena para almacenar el puerto seleccionado
@@ -294,14 +294,14 @@ btn_iniciar_serial = tk.Button(fr_botones, text="Abrir Serial", command=iniciarS
 btn_iniciar_serial.grid(row=2, column=0, sticky="ew", padx=10, pady=5)
 
 # Crea un botón para cerrar la conexión serial
-btn_detener_serial = tk.Button(fr_botones, text="Cerrar Serial", command=kill_Serial)
+btn_detener_serial = tk.Button(fr_botones, text="Cerrar Serial", command=cerrar_Serial)
 btn_detener_serial.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
 
 # Crea una variable de cadena para mostrar el estado de la grabación
 textoGrabacion = tk.StringVar(ventana)
 textoGrabacion.set("No grabando")
 # Crea una etiqueta para mostrar el estado de la grabación
-etiquetaGrabacion = tk.Label(fr_botones, textvariable=textoGrabacion, font=('Helvetica', 12), fg='black')
+etiquetaGrabacion = tk.Label(fr_botones, textvariable=textoGrabacion, font=('Arial', 14), fg='red')
 etiquetaGrabacion.grid(row=4, column=0, sticky="ew", padx=10)
 
 # Crea un botón para iniciar la grabación de datos
@@ -316,7 +316,7 @@ btn_detener_grab.grid(row=6, column=0, sticky="ew", padx=10, pady=5)
 textoBPM = tk.StringVar(ventana)
 textoBPM.set("BPM: N/A")
 # Crea una etiqueta para mostrar el BPM
-etiquetaBPM = tk.Label(fr_botones, textvariable=textoBPM, font=('Helvetica', 12), fg='blue')
+etiquetaBPM = tk.Label(fr_botones, textvariable=textoBPM, font=('Arial', 14), fg='red')
 etiquetaBPM.grid(row=7, column=0, sticky="ew", padx=10)
 
 # Ubica el marco de botones en la columna 0 (izquierda) y la etiqueta de "Datos en Vivo" en la columna 1
@@ -336,7 +336,7 @@ def preguntar_salir():
         None
     """
     if tk.messagebox.askokcancel("Cerrar", "Cerrando conexión serial"):
-        kill_Serial()  # Cierra la conexión serial
+        cerrar_Serial()  # Cierra la conexión serial
         ventana.destroy()  # Destruye la ventana principal
 
 # Asigna la función 'preguntar_salir' al evento de cerrar la ventana
