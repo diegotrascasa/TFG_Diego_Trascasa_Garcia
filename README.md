@@ -1,6 +1,7 @@
 # Aplicación Web de Monitoreo Cardíaco en Tiempo Real con Análisis Predictivo de Tipos de Latidos en ECG.
 ### Ingeniería de la Salud
-#### Diego Trascasa García
+#### Autor: Diego Trascasa García
+#### Tutor: Guirguis Zaki Guirguis Abdelmessih
 
 # Resumen:
 
